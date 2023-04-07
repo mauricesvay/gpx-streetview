@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPX Streetview</title>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mousetrap@1.6.5/mousetrap.min.js"></script>
+    <script src="./GPXParser.min.js"></script>
+    <script type="module" src="./index.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <div class="viewport">
+        <div id="map"></div>
+        <div id="pano"></div>
+      </div>
+      <div id="controls">
+        <div>
+          <label>Select a GPX file:</label>
+          <input id="file-selector" type="file" accept=".gpx" />
+        </div>
+        <div class="controls">
+          <button id="prev" title="Position précédente (J)" disabled>←</button>
+          <button id="next" title="Position suivante (K)" disabled>→</button>
+          <input
+            value="0"
+            type="range"
+            name="trackbar"
+            id="trackbar"
+            min="0"
+            max="100"
+            step="1"
+            disabled
+          />
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initialize&v=weekly"
+      defer
+    ></script>
+  </body>
+</html>

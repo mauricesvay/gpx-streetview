@@ -29,7 +29,8 @@ async function initialize() {
     strokeOpacity: 1.0,
     strokeWeight: 2,
   });
-  const panorama = new google.maps.StreetViewPanorama(
+  const streetViewService = new google.maps.StreetViewService();
+  let panorama = new google.maps.StreetViewPanorama(
     document.getElementById("pano"),
     {
       position: currentPosition,
@@ -127,16 +128,44 @@ async function initialize() {
     currentHeading = heading;
   };
 
+  let previous_panorama_state = false;
+
   const updateStreetView = _.debounce(() => {
-    panorama.setPosition(currentPosition);
-    panorama.setPov({
-      heading: currentHeading,
-      pitch: 10,
+    streetViewService.getPanorama({ location: currentPosition, radius: 50 }, function (data, status) {
+      if (status === google.maps.StreetViewStatus.OK) {
+
+        if (!previous_panorama_state) { // Reset panorama if it was not available before / crashed
+          panorama = new google.maps.StreetViewPanorama(
+            document.getElementById("pano"),
+            {
+              position: currentPosition,
+              pov: {
+                heading: currentHeading,
+                pitch: 10,
+              },
+              source: google.maps.StreetViewSource.OUTDOOR,
+            }
+          )
+          previous_panorama_state = true;
+        }
+        panorama.setPosition(currentPosition);
+        panorama.setPov({
+          heading: currentHeading,
+          pitch: 10,
+        });
+        map.setStreetView(panorama);
+        if (follow) {
+          centerMap();
+        }
+
+      } else {
+        previous_panorama_state = false;
+        // Street View panorama is not available for this location
+        console.error("Street View panorama is not available for this location.");
+        document.getElementById("pano").innerHTML = "Street View is not available for this location.";
+        // You can provide a fallback or handle the error as needed here.
+      }
     });
-    map.setStreetView(panorama);
-    if (follow) {
-      centerMap();
-    }
   }, 500);
 
   function updateTrackbar() {

@@ -28,6 +28,9 @@ body {
   padding-top: 8px;
   display: flex;
 }
+.controls > button {
+  padding: 8px;
+}
 
 #trackbar {
   flex: 1 1 auto;

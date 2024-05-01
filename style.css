@@ -32,3 +32,9 @@ body {
 #trackbar {
   flex: 1 1 auto;
 }
+
+@media screen and (orientation: portrait) {
+  .viewport {
+    flex-direction: column;
+  }
+}
